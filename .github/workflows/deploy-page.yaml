@@ -1,0 +1,32 @@
+name: deploy-page
+on: [push]
+jobs:
+  build:
+    name: build vite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: oven-sh/setup-bun@v2
+        with:
+          version: latest
+      
+      - run: bun install
+      - run: bun run build
+
+  deploy:
+    name: deploy vite page
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

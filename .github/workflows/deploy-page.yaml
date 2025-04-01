@@ -2,20 +2,7 @@ name: deploy-page
 on:
   push:
     branches: [main]
-
-
 jobs:
-  build:
-    name: build vite
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - uses: oven-sh/setup-bun@v2
-      
-      - run: bun install
-      - run: bun run build
-
   deploy:
     name: deploy vite page
     needs: build
@@ -30,6 +17,15 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Bun install dependency
+        run: bun install
+      - name: Bun build
+        run: bun run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
